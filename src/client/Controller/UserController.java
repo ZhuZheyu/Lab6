@@ -55,7 +55,7 @@ public class UserController {
                             AppConsole.println(userInput);
                         }
                     } else {
-                        AppConsole.print("> ";
+                        AppConsole.print("> ");
                         userInput = userScanner.nextLine();
                     }
                     userCommand = (userInput.trim() + " ").split(" ", 2);
@@ -114,7 +114,6 @@ public class UserController {
 
     /**
      * Processes the entered command.
-     *
      * @return Status of code.
      */
     private ProcessingCode processCommand(String command, String commandArgument) {
@@ -203,8 +202,8 @@ public class UserController {
     }
 
     /**
-     * Generates band to update.
-     * @return Band to update.
+     * Generates person to update.
+     * @return Person to update.
      * @throws IncorrectInputScriptException When something went wrong in script.
      */
     private PersonRaw generatePersonUpdate() throws IncorrectInputScriptException {
@@ -220,16 +219,18 @@ public class UserController {
                 personBuilder.setEyeColor() : null;
         Color hairColor = personBuilder.askQuestion("Do you want to change color of hair?") ?
                 personBuilder.setHairColor() : null;
-        Country studio = personBuilder.askQuestion("Do you want to change the studio?") ?
-                personBuilder.askStudio() : null;
+        Country nationality = personBuilder.askQuestion("Do you want to change the nationality?") ?
+                personBuilder.setCountry() : null;
+        Location location = personBuilder.askQuestion("Do you want to change the location?") ?
+                personBuilder.setLocation() : null;
         return new PersonRaw(
                 name,
                 coordinates,
                 height,
-                description,
-                genre,
-                studio,
-                a
+                eyeColor,
+                hairColor,
+                nationality,
+                location
         );
     }
 

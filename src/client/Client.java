@@ -1,8 +1,11 @@
 package client;
 
+import client.Controller.UserController;
 import client.UI.AppConsole;
 import common.Exceptions.ConnectionErrorException;
 import common.Exceptions.DeclaredLimitException;
+import common.Interaction.Request;
+import common.Interaction.Response;
 
 import java.io.*;
 
@@ -13,17 +16,17 @@ public class Client {
     private int reconnectionTimeout;
     private int reconnectionAttempts;
     private int maxReconnectionAttempts;
-    private UserHandler userHandler;
+    private UserController userController;
     private SocketChannel socketChannel;
     private ObjectOutputStream serverWriter;
     private ObjectInputStream serverReader;
 
-    public Client(String host, int port, int reconnectionTimeOut, int maxReconnectionAttempts, UserHandler userHandler) {
+    public Client(String host, int port, int reconnectionTimeOut, int maxReconnectionAttempts, UserController userController) {
         this.host = host;
         this.port = port;
         this.reconnectionTimeout = reconnectionTimeOut;
         this.maxReconnectionAttempts = maxReconnectionAttempts;
-        this.userHandler = userHandler;
+        this.userController = userController;
     }
     /**
      * Begins client operation.
@@ -91,27 +94,27 @@ public class Client {
         Response serverResponse = null;
         do {
             try {
-                requestToServer = serverResponse != null ? userHandler.handle(serverResponse.getResponseCode()) :
-                        userHandler.handle(null);
+                requestToServer = serverResponse != null ? userController.handle(serverResponse.getResponseCode()) :
+                        userController.handle(null);
                 if (requestToServer.isEmpty()) continue;
                 serverWriter.writeObject(requestToServer);
                 serverResponse = (Response) serverReader.readObject();
-                OutputDeliver.print(serverResponse.getResponseBody());
+                AppConsole.print(serverResponse.getResponseBody());
             } catch (InvalidClassException exception) {
-                OutputDeliver.printError("Произошла ошибка при отправке данных на сервер!");
+                AppConsole.printError("Произошла ошибка при отправке данных на сервер!");
             } catch (NotSerializableException exception) {
                 System.out.println("Не удалось сериализовать");
             } catch (ClassNotFoundException exception) {
-                OutputDeliver.printError("Произошла ошибка при чтении полученных данных!");
+                AppConsole.printError("Произошла ошибка при чтении полученных данных!");
             } catch (IOException exception) {
-                OutputDeliver.printError("Соединение с сервером разорвано!");
+                AppConsole.printError("Соединение с сервером разорвано!");
                 try {
                     reconnectionAttempts++;
                     connectToServer();
                 } catch (ConnectionErrorException | DeclaredLimitException reconnectionException) {
                     if (requestToServer.getCommandName().equals("exit"))
-                        OutputDeliver.println("Команда не будет зарегистрирована на сервере.");
-                    else OutputDeliver.println("Попробуйте повторить команду позднее.");
+                        AppConsole.println("Команда не будет зарегистрирована на сервере.");
+                    else AppConsole.println("Попробуйте повторить команду позднее.");
                 }
             }
         } while (!requestToServer.getCommandName().equals("exit"));

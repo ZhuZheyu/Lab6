@@ -1,5 +1,4 @@
-package common.Interaction;
-
+package client.Controller;
 
 /**
  * Enum of response codes
