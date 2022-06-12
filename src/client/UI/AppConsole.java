@@ -1,8 +1,8 @@
 package client.UI;
 
-import Controller.CommandManager;
-import Controller.PersonBuilder;
+import client.Controller.PersonBuilder;
 import common.Exceptions.ScriptRecursionException;
+import server.Controller.CommandManager;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -13,9 +13,9 @@ import java.util.Scanner;
 
 public class AppConsole {
     private final CommandManager commandManager;
-    private Scanner scanner;
+    private final Scanner scanner;
     private final PersonBuilder personBuilder;
-    private List<String> scriptStack = new ArrayList<>();
+    private final List<String> scriptStack = new ArrayList<>();
 
     public AppConsole(CommandManager commandManager, Scanner scanner, PersonBuilder personBuilder) {
         this.commandManager = commandManager;

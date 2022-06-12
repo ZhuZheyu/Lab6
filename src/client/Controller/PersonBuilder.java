@@ -2,7 +2,10 @@ package client.Controller;
 
 import client.UI.AppConsole;
 import common.Data.*;
+import common.Exceptions.DeclaredLimitException;
+import common.Exceptions.IncorrectInputScriptException;
 
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class PersonBuilder {
@@ -185,6 +188,37 @@ public class PersonBuilder {
                 setCountry(),
                 setLocation()
         );
+    }
+
+    /**
+     * Asks a user a question.
+     * @return Answer (true/false).
+     * @param question A question.
+     * @throws IncorrectInputScriptException If script is running and something goes wrong.
+     */
+    public boolean askQuestion(String question) throws IncorrectInputScriptException {
+        String finalQuestion = question + " (+/-):";
+        String answer;
+        while (true) {
+            try {
+                AppConsole.println(finalQuestion);
+                AppConsole.print("$>");
+                answer = userScanner.nextLine().trim();
+                if (fileMode) AppConsole.println(answer);
+                if (!answer.equals("+") && !answer.equals("-")) throw new DeclaredLimitException();
+                break;
+            } catch (NoSuchElementException exception) {
+                AppConsole.printError("The answer is not recognized!");
+                if (fileMode) throw new IncorrectInputScriptException();
+            } catch (DeclaredLimitException exception) {
+                AppConsole.printError("The answer must be in signs '+' or '-'!");
+                if (fileMode) throw new IncorrectInputScriptException();
+            } catch (IllegalStateException exception) {
+                AppConsole.printError("Unexpected error!");
+                System.exit(0);
+            }
+        }
+        return answer.equals("+");
     }
 
     public Scanner getUserScanner() {
