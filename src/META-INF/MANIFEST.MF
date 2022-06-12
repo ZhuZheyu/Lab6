@@ -1,3 +1,3 @@
 Manifest-Version: 1.0
-Server-Class: Server
+server.Server-Class: server.Server
 

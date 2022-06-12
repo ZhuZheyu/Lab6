@@ -1,16 +1,15 @@
+package server;
+
 import server.Commands.*;
-import Controller.CollectionManager;
-import Controller.CommandManager;
-import Controller.FileManager;
-import Controller.PersonBuilder;
 import client.UI.AppConsole;
 
 import java.io.IOException;
 import java.util.Scanner;
 
 public class Server {
-    public static void main(String[] args){
+    public static void main(String[] args){ /*
         try (Scanner userScanner = new Scanner((System.in))) {
+
             PersonBuilder personBuilder = new PersonBuilder(userScanner);
             FileManager fileManager = new FileManager();
             CollectionManager collectionManager = new CollectionManager(fileManager);
@@ -33,5 +32,7 @@ public class Server {
         } catch (IOException exception) {
             exception.printStackTrace();
         }
+
+             */
     }
 }
